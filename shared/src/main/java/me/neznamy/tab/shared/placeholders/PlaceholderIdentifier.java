@@ -4,7 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Utility class for working with placeholder identifiers in both
- * {@code %placeholder%} and MiniPlaceholders {@code <placeholder>} syntax.
+ * {@code %placeholder%}, MiniPlaceholders {@code <placeholder>}, and VoxelCore's
+ * {@code :alias:} syntax.
  */
 public final class PlaceholderIdentifier {
 
@@ -20,7 +21,8 @@ public final class PlaceholderIdentifier {
      */
     public static boolean isValid(@NotNull String identifier) {
         return (identifier.startsWith("%") && identifier.endsWith("%")) ||
-                (identifier.startsWith("<") && identifier.endsWith(">"));
+                (identifier.startsWith("<") && identifier.endsWith(">")) ||
+                VoxelCorePlaceholderSyntax.isValid(identifier);
     }
 
     /**
