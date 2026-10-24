@@ -458,7 +458,8 @@ public class PlaceholderManagerImpl extends RefreshableFeature implements Placeh
             String value = p.getLastValueSafe(player);
             output = output.replace(placeholder, value);
         }
-        return output;
+        // Resolve aliases in strings assembled from multiple placeholders as well.
+        return TAB.getInstance().getPlatform().postProcessPlaceholderOutput(output);
     }
 
     // ------------------
