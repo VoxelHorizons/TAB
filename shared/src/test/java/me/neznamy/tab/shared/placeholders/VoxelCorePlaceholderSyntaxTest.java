@@ -30,8 +30,8 @@ class VoxelCorePlaceholderSyntaxTest {
     void processesAliasReturnedByLuckPermsPrefix() {
         // TAB config stays tagprefix: "%luckperms-prefix%"; the returned value is :player:.
         String resolved = VoxelCorePlaceholderSyntax.processOutput(":player:",
-                text -> text.replace(":player:", "§f\\ue123"));
-        assertEquals("§f\\ue123", resolved);
+                text -> text.replace(":player:", "§f" + (char) 0xE123));
+        assertEquals("§f" + (char) 0xE123, resolved);
     }
 
     @Test
