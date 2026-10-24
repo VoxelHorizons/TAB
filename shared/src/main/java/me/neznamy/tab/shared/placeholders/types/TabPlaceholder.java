@@ -86,11 +86,11 @@ public abstract class TabPlaceholder implements Placeholder {
     @NotNull
     protected String evaluate(@NonNull String returnedValue, @Nullable TabPlayer player) {
         String value = returnedValue;
-        if (value.contains("%") || value.contains("<")) {
+        if (value.contains("%") || value.contains("<") || value.contains(":")) {
             value = setPlaceholders(value, player);
         }
         value = replacements.findReplacement(value);
-        if (value.contains("%") || value.contains("<")) {
+        if (value.contains("%") || value.contains("<") || value.contains(":")) {
             value = setPlaceholders(value, player);
         }
         return value;
