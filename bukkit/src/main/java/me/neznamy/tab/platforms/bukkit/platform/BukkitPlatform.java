@@ -172,6 +172,13 @@ public class BukkitPlatform implements BackendPlatform {
 
     @Override
     @NotNull
+    public String postProcessPlaceholderOutput(@NotNull String value) {
+        if (!voxelCorePlaceholders.isAvailable()) return value;
+        return VoxelCorePlaceholderSyntax.processOutput(value, voxelCorePlaceholders::resolve);
+    }
+
+    @Override
+    @NotNull
     public List<String> detectAdditionalPlaceholders(@NotNull String text) {
         return voxelCorePlaceholders.isAvailable()
                 ? VoxelCorePlaceholderSyntax.detect(text) : Collections.emptyList();
