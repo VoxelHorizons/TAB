@@ -14,7 +14,7 @@ _DEFAULT_:
 
 Supported forms include `:name:`, `:namespace/name:`, and `:offset_-16:`. Multiple adjacent aliases work, including `:offset_-16::warps_background:`. Existing `%placeholderapi_placeholder%` and TAB placeholders continue to work alongside them.
 
-Use `/tab parse <player> :branding_icon_small:` to check an alias. `/tab reload` reloads TAB configuration. VoxelCore content updates are picked up during TAB's normal placeholder refresh cycle; per-alias refresh intervals can be configured in TAB's `placeholders.yml`, using a quoted key such as `':branding_icon_small:': 1000`.
+Use `/tab parse <player> :branding_icon_small:` to check an alias. `/tab reload` reloads TAB configuration. VoxelCore content updates are picked up during TAB's normal placeholder refresh cycle; per-alias refresh intervals can be configured in TAB's `config.yml` under `placeholder-refresh-intervals`, using a quoted key such as `':branding_icon_small:': 1000`.
 
 ## Implementation details
 
