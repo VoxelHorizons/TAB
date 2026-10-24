@@ -544,7 +544,7 @@ public class PlaceholderManagerImpl extends RefreshableFeature implements Placeh
     @NotNull
     public synchronized PlaceholderReference getPlaceholderReference(@NonNull String identifier) {
         if (!PlaceholderIdentifier.isValid(identifier)) {
-            throw new IllegalArgumentException("Placeholder identifier must start and end with % or <> (attempted to use \"" + identifier + "\")");
+            throw new IllegalArgumentException("Placeholder identifier must be %name%, <name>, or :alias: (attempted to use \"" + identifier + "\")");
         }
         // Check if placeholder is already registered
         PlaceholderReference reference = registeredPlaceholders.get(identifier);
