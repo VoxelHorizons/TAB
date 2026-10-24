@@ -54,7 +54,7 @@ public abstract class TabPlaceholder implements Placeholder {
         if (refresh % TabConstants.Placeholder.MINIMUM_REFRESH_INTERVAL != 0 && refresh != -1)
             throw new IllegalArgumentException("Refresh interval must be divisible by " + TabConstants.Placeholder.MINIMUM_REFRESH_INTERVAL);
         if (!PlaceholderIdentifier.isValid(identifier))
-            throw new IllegalArgumentException("Identifier must start and end with % or <> (attempted to use \"" + identifier + "\")");
+            throw new IllegalArgumentException("Identifier must be %name%, <name>, or :alias: (attempted to use \"" + identifier + "\")");
         this.identifier = identifier;
         this.refresh = refresh;
         Map<Object, Object> map = TAB.getInstance().getConfiguration().getConfig().getReplacements().getValues().get(identifier);
