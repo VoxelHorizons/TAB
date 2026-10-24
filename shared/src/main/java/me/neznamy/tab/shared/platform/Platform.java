@@ -29,6 +29,12 @@ public interface Platform {
      */
     @NotNull GroupManager detectPermissionPlugin();
 
+    /** Resolves platform-specific tokens in values returned by all placeholder providers. */
+    @NotNull
+    default String postProcessPlaceholderOutput(@NotNull String value) {
+        return value;
+    }
+
     /**
      * Creates an instance of {@link me.neznamy.tab.api.placeholder.Placeholder}
      * to handle this unknown placeholder (typically a PAPI placeholder)
