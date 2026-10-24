@@ -1,0 +1,21 @@
+name: VoxelCore placeholder compatibility
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+      - name: Validate placeholder tests and Bukkit integration compilation
+        run: ./gradlew :shared:test :bukkit:compileJava --no-daemon
