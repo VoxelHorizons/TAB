@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+  pull_request:
 jobs:
   build:
     name: Build
@@ -28,7 +29,7 @@ jobs:
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-        run: ./gradlew clean build
+        run: ./gradlew clean build -PskipFand=true
       - name: Rename JAR with Build Number
         run: |
           find jar/build/libs -type f -name "TAB v*.jar" -print0 | while IFS= read -r -d '' original; do

@@ -53,7 +53,11 @@ val moddedPaths = setOf(
 )
 
 val brokenPlatforms: List<Project> = brokenPlatformPaths.map { rootProject.project(it) }
-val platforms: List<Project> = platformPaths.map { rootProject.project(it) }
+// Keep the universal JAR build functional with -PskipFand=true. Other
+// platform projects are still required and must not be silently skipped.
+val platforms: List<Project> = platformPaths
+    .filter { it != ":fand" || rootProject.findProject(it) != null }
+    .map { rootProject.project(it) }
 val moddedPlatforms: List<Project> = moddedPaths.map { rootProject.project(it) }
 
 tasks {
