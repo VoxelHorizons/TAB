@@ -16,7 +16,8 @@ from [GitHub actions](https://github.com/NEZNAMY/TAB/actions) (you must be logge
 
 # Compiling
 Compilation requires JDK 25 and up.  
-To compile the plugin, run `./gradlew build` from the terminal.  
+To compile the plugin with every platform (including Fand), run `./gradlew build` from the terminal.  
+The Fand API is hosted on an external Maven repository which may sometimes return server errors. To compile all other platforms without relying on that repository, use `./gradlew build -PskipFand=true`. GitHub Actions uses this option; its uploaded JAR therefore excludes Fand support, but still contains Bukkit/Paper, Velocity, BungeeCord, Fabric and other configured platforms.  
 Once the plugin compiles, grab the jar from `/jar/build/libs/` folder.  
 The universal jar contains all modules for all supported platforms.
 
