@@ -27,6 +27,30 @@ class VoxelCorePlaceholderSyntaxTest {
     }
 
     @Test
+    void processesAliasReturnedByLuckPermsPrefix() {
+        // TAB config stays tagprefix: "%luckperms-prefix%"; the returned value is :player:.
+        String resolved = VoxelCorePlaceholderSyntax.processOutput(":player:",
+                text -> text.replace(":player:", "§f\\ue123"));
+        assertEquals("§f\\ue123", resolved);
+    }
+
+    @Test
+    void processesMultipleReturnedAliasesAndPreservesRemainingPlaceholders() {
+        String output = VoxelCorePlaceholderSyntax.processOutput(
+                "&7:player: :offset_-16::voxel/warps_background: %player_name%",
+                text -> text.replace(":player:", "[rank]")
+                        .replace(":offset_-16:", "[negative spacing]")
+                        .replace(":voxel/warps_background:", "[background]"));
+        assertEquals("&7[rank] [negative spacing][background] %player_name%", output);
+    }
+
+    @Test
+    void ignoresReturnedTextWithoutColonTokens() {
+        assertEquals("plain %luckperms-prefix%", VoxelCorePlaceholderSyntax.processOutput(
+                "plain %luckperms-prefix%", text -> { throw new AssertionError("should not run"); }));
+    }
+
+    @Test
     void validatesIdentifiersWithoutChangingExistingPlaceholderSyntax() {
         assertTrue(PlaceholderIdentifier.isValid(":offset_-320:"));
         assertTrue(PlaceholderIdentifier.isValid(":voxel/ui.profile:"));
