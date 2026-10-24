@@ -86,14 +86,16 @@ public abstract class TabPlaceholder implements Placeholder {
     @NotNull
     protected String evaluate(@NonNull String returnedValue, @Nullable TabPlayer player) {
         String value = returnedValue;
-        if (value.contains("%") || value.contains("<") || value.contains(":")) {
+        if (value.contains("%") || value.contains("<")) {
             value = setPlaceholders(value, player);
         }
         value = replacements.findReplacement(value);
-        if (value.contains("%") || value.contains("<") || value.contains(":")) {
+        if (value.contains("%") || value.contains("<")) {
             value = setPlaceholders(value, player);
         }
-        return value;
+        // LuckPerms and PlaceholderAPI can return a VoxelCore alias such as :player:.
+        // Resolve only after normal nested placeholders and output replacements.
+        return TAB.getInstance().getPlatform().postProcessPlaceholderOutput(value);
     }
 
     /**
