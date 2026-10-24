@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.function.UnaryOperator;
 
 /**
  * VoxelCore's colon-delimited UI glyph aliases, including namespaced aliases and pixel offsets.
@@ -32,6 +33,12 @@ public final class VoxelCorePlaceholderSyntax {
             placeholders.add(matcher.group());
         }
         return placeholders;
+    }
+
+    /** Post-processes the resolved output from LuckPerms, PAPI and TAB placeholders. */
+    @NotNull
+    public static String processOutput(@NotNull String value, @NotNull UnaryOperator<String> resolver) {
+        return value.indexOf(':') < 0 ? value : resolver.apply(value);
     }
 
     /** Checks whether the input is one complete colon-delimited VoxelCore alias. */
