@@ -78,7 +78,7 @@ public class RelationalPlaceholderImpl extends TabPlaceholder implements Relatio
      */
     public boolean hasValueChanged(@NonNull TabPlayer viewer, @NonNull TabPlayer target, @Nullable String value) {
         if (value == null) return false; //bridge placeholders, they are updated using updateValue method
-        String newValue = replacements.findReplacement(value);
+        String newValue = TAB.getInstance().getPlatform().postProcessPlaceholderOutput(replacements.findReplacement(value));
         Map<TabPlayer, String> viewerMap = viewer.lastRelationalValues.computeIfAbsent(this, v -> Collections.synchronizedMap(new WeakHashMap<>()));
         if (!viewerMap.getOrDefault(target, identifier).equals(newValue)) {
             viewerMap.put(target, newValue);
@@ -93,7 +93,7 @@ public class RelationalPlaceholderImpl extends TabPlaceholder implements Relatio
     public void updateFromNested(@NonNull TabPlayer viewer) {
         for (TabPlayer target : TAB.getInstance().getOnlinePlayers()) {
             String value = request(viewer, target);
-            String s = replacements.findReplacement(String.valueOf(value));
+            String s = TAB.getInstance().getPlatform().postProcessPlaceholderOutput(replacements.findReplacement(String.valueOf(value)));
             viewer.lastRelationalValues.computeIfAbsent(this, v -> Collections.synchronizedMap(new WeakHashMap<>())).put(target, s);
             if (!target.isLoaded()) continue; // Updated on join
             for (RefreshableFeature f : reference.getUsedByFeatures()) {
@@ -131,13 +131,13 @@ public class RelationalPlaceholderImpl extends TabPlaceholder implements Relatio
      * @return  last known value for entered player duo
      */
     public String getLastValue(@NonNull TabPlayer viewer, @NonNull TabPlayer target) {
-        return setPlaceholders(
+        return TAB.getInstance().getPlatform().postProcessPlaceholderOutput(setPlaceholders(
                 EnumChatFormat.color(
                         viewer.lastRelationalValues.computeIfAbsent(this, v -> Collections.synchronizedMap(new WeakHashMap<>()))
                                 .computeIfAbsent(target, t -> retrieveValue(viewer, target))
                 ),
                 target
-        );
+        ));
     }
 
     @NotNull
