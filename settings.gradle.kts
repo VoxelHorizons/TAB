@@ -70,5 +70,9 @@ include(":bungeecord")
 include(":fabric")
 include(":neoforge")
 include(":forge")
-include(":fand")
+// Fand API is hosted on a separately operated Maven server. CI can omit this
+// platform when that repository is unavailable without affecting other platforms.
+if (providers.gradleProperty("skipFand").orNull != "true") {
+    include(":fand")
+}
 include(":jar")
