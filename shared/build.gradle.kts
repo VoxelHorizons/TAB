@@ -21,6 +21,8 @@ dependencies {
     compileOnlyApi("org.geysermc.floodgate:api:2.2.0-SNAPSHOT")
     compileOnlyApi("net.kyori:adventure-api:4.25.0-SNAPSHOT")
     compileOnlyApi("net.kyori:adventure-text-minimessage:4.25.0-SNAPSHOT")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("com.saicone.delivery4j:delivery4j:1.1.1")
     implementation("com.saicone.delivery4j:broker-rabbitmq:1.1.1") {
         exclude("org.slf4j", "slf4j-api")
@@ -44,4 +46,8 @@ sourceSets.main {
             property("credits", rootProject.ext.get("credits")!!.toString())
         }
     }
+}
+// JUnit tests for platform-neutral placeholder syntax.
+tasks.test {
+    useJUnitPlatform()
 }

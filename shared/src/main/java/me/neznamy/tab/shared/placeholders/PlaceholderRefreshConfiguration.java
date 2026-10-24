@@ -59,7 +59,7 @@ public class PlaceholderRefreshConfiguration {
             if (identifier.equals("default-refresh-interval")) continue;
             if (!PlaceholderIdentifier.isValid(identifier)) {
                 section.startupWarn("Placeholder refresh intervals have a value for \"" + identifier + "\", which is not " +
-                        "a valid placeholder pattern (placeholders must start and end with % or <>)");
+                        "a valid placeholder pattern (expected %name%, <name>, or :alias:)");
                 continue;
             }
             refreshIntervals.put(identifier, fixInterval(section, identifier, defaultInterval));

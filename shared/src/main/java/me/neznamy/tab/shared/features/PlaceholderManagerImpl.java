@@ -458,7 +458,8 @@ public class PlaceholderManagerImpl extends RefreshableFeature implements Placeh
             String value = p.getLastValueSafe(player);
             output = output.replace(placeholder, value);
         }
-        return output;
+        // Resolve aliases in strings assembled from multiple placeholders as well.
+        return TAB.getInstance().getPlatform().postProcessPlaceholderOutput(output);
     }
 
     // ------------------
@@ -544,7 +545,7 @@ public class PlaceholderManagerImpl extends RefreshableFeature implements Placeh
     @NotNull
     public synchronized PlaceholderReference getPlaceholderReference(@NonNull String identifier) {
         if (!PlaceholderIdentifier.isValid(identifier)) {
-            throw new IllegalArgumentException("Placeholder identifier must start and end with % or <> (attempted to use \"" + identifier + "\")");
+            throw new IllegalArgumentException("Placeholder identifier must be %name%, <name>, or :alias: (attempted to use \"" + identifier + "\")");
         }
         // Check if placeholder is already registered
         PlaceholderReference reference = registeredPlaceholders.get(identifier);
