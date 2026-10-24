@@ -11,6 +11,7 @@ import me.neznamy.tab.platforms.bukkit.bossbar.ViaBossBar;
 import me.neznamy.tab.platforms.bukkit.features.BukkitTabExpansion;
 import me.neznamy.tab.platforms.bukkit.features.PerWorldPlayerList;
 import me.neznamy.tab.platforms.bukkit.hook.BukkitPremiumVanishHook;
+import me.neznamy.tab.platforms.bukkit.hook.VoxelCorePlaceholderHook;
 import me.neznamy.tab.shared.*;
 import me.neznamy.tab.shared.backend.BackendPlatform;
 import me.neznamy.tab.shared.chat.TabTextColor;
@@ -24,6 +25,7 @@ import me.neznamy.tab.shared.features.PlaceholderManagerImpl;
 import me.neznamy.tab.shared.features.injection.PipelineInjector;
 import me.neznamy.tab.shared.features.types.TabFeature;
 import me.neznamy.tab.shared.hook.LuckPermsHook;
+import me.neznamy.tab.shared.placeholders.VoxelCorePlaceholderSyntax;
 import me.neznamy.tab.shared.placeholders.expansion.EmptyTabExpansion;
 import me.neznamy.tab.shared.placeholders.expansion.TabExpansion;
 import me.neznamy.tab.shared.placeholders.types.PlayerPlaceholderImpl;
@@ -73,6 +75,10 @@ public class BukkitPlatform implements BackendPlatform {
 
     /** Variables checking presence of other plugins to hook into */
     private final boolean placeholderAPI = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
+
+    /** Optional, player-independent VoxelCore :glyph: and :offset_N: aliases. */
+    @NotNull
+    private final VoxelCorePlaceholderHook voxelCorePlaceholders = new VoxelCorePlaceholderHook();
 
     /** Spigot field for tracking TPS, the array is final and only being modified instead of re-instantiated */
     private double[] recentTps;
@@ -165,7 +171,21 @@ public class BukkitPlatform implements BackendPlatform {
     }
 
     @Override
+    @NotNull
+    public List<String> detectAdditionalPlaceholders(@NotNull String text) {
+        return voxelCorePlaceholders.isAvailable()
+                ? VoxelCorePlaceholderSyntax.detect(text) : Collections.emptyList();
+    }
+
+    @Override
     public void registerUnknownPlaceholder(@NotNull String identifier) {
+        if (VoxelCorePlaceholderSyntax.isValid(identifier)) {
+            // Use a server placeholder: compiled UI glyphs are identical for all players.
+            // The normal TAB refresh cycle picks up VoxelCore content reloads as well.
+            TAB.getInstance().getPlaceholderManager().registerServerPlaceholder(identifier,
+                    () -> voxelCorePlaceholders.resolve(identifier));
+            return;
+        }
         if (!placeholderAPI) {
             registerDummyPlaceholder(identifier);
             return;
