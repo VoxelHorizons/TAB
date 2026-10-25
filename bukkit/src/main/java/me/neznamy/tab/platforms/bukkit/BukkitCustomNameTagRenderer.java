@@ -70,7 +70,7 @@ public final class BukkitCustomNameTagRenderer {
             UUID id = owner.getUniqueId();
             current.add(id);
             Tag tag = tags.get(id);
-            if (tag != null && (tag.entity.isDead() ||
+            if (tag != null && (tag.entity.isDead() || !tag.entity.isValid() ||
                     !tag.entity.getWorld().equals(owner.getWorld()))) {
                 tag.entity.remove();
                 tags.remove(id);
@@ -83,10 +83,7 @@ public final class BukkitCustomNameTagRenderer {
                 if (display == null) continue;
                 tag = new Tag(display);
                 tags.put(id, tag);
-                // No accidental vanilla-visible labels until permissions are checked.
-                for (Player viewer : Bukkit.getOnlinePlayers()) {
-                    setVisibility(viewer, display, false);
-                }
+                // setVisibleByDefault(false) prevents labels leaking to new viewers.
                 update(tag, owner, tabOwner);
             } else if (tag.entity.getLocation().distanceSquared(desired) > 0.0025) {
                 tag.entity.teleport(desired);
@@ -167,9 +164,6 @@ public final class BukkitCustomNameTagRenderer {
             } else if (!visible && shown != null) {
                 setVisibility(viewer, tag.entity, false);
                 tag.visibleTo.remove(id);
-            } else if (!visible) {
-                // New viewers should not see this tag until explicitly allowed.
-                setVisibility(viewer, tag.entity, false);
             }
         }
         tag.visibleTo.keySet().retainAll(connected);
