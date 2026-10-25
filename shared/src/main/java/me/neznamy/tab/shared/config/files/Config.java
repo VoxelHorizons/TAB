@@ -137,6 +137,18 @@ public class Config {
     }
 
     /**
+     * Install invisible nametag team handling and sorting when groups.yml or
+     * users.yml defines tagname, even if scoreboard-teams.enabled is false.
+     * This does not enable the sidebar scoreboard.
+     */
+    public void enableCustomNameTagsFromProperties() {
+        if (sorting == null) {
+            sorting = SortingConfiguration.fromSection(config.getConfigurationSection("scoreboard-teams"));
+        }
+        teams = TeamConfiguration.fromSection(config.getConfigurationSection("scoreboard-teams"), true);
+    }
+
+    /**
      * Returns value of hidden config option with specified path if it exists, defaultValue otherwise
      *
      * @param   path

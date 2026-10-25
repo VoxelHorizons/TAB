@@ -31,6 +31,12 @@ public class TeamConfiguration {
      */
     @NotNull
     public static TeamConfiguration fromSection(@NotNull ConfigurationSection section) {
+        return fromSection(section, false);
+    }
+
+    /** Auto enable when an explicit tagname property was found in groups or users. */
+    @NotNull
+    public static TeamConfiguration fromSection(@NotNull ConfigurationSection section, boolean detectedTagName) {
         // Check keys
         section.checkForUnknownKey(Arrays.asList("enabled", "enable-collision", "invisible-nametags", "sorting-types",
                 "case-sensitive-sorting", "can-see-friendly-invisibles", "disable-condition", "custom-nametags"));
@@ -41,7 +47,7 @@ public class TeamConfiguration {
                 section.getObject("invisible-nametags", "false").toString(),
                 section.getBoolean("can-see-friendly-invisibles", false),
                 section.getString("disable-condition", "%world%=disabledworld"),
-                section.getBoolean("custom-nametags.enabled", false)
+                detectedTagName || section.getBoolean("custom-nametags.enabled", false)
         );
     }
 }

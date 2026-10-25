@@ -10,8 +10,8 @@ _DEFAULT_:
   tabprefix: "%luckperms-prefix%"
   tagprefix: "%luckperms-prefix%"
   customtabname: "%player%"
-  # Replaces the overhead username when custom-nametags is enabled.
-  tagname: "%player%"
+  # Defining tagname automatically enables overhead nicknames on modern Paper.
+  # tagname: "%player_displayname%"
   tabsuffix: "%luckperms-suffix%"
   tagsuffix: "%luckperms-suffix%"
 
