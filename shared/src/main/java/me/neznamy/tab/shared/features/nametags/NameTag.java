@@ -242,6 +242,10 @@ public class NameTag extends TabFeature implements NameTagManager, JoinListener,
         }
     }
 
+    public boolean isCustomNameTagsActive() {
+        return configuration.isCustomNameTags() && TAB.getInstance().getPlatform().supportsCustomNameTags();
+    }
+
     private void registerTeam(@NonNull TabPlayer p, @NonNull TabPlayer viewer) {
         if (shouldRegister(p, viewer)) {
             viewer.teamData.registerTeam(
@@ -249,7 +253,8 @@ public class NameTag extends TabFeature implements NameTagManager, JoinListener,
                     p.teamData.teamName,
                     prefixCache.get(p.teamData.prefix.getFormat(viewer)),
                     suffixCache.get(p.teamData.suffix.getFormat(viewer)),
-                    p.teamData.getTeamVisibility(viewer) ? NameVisibility.ALWAYS : NameVisibility.NEVER,
+                    isCustomNameTagsActive() ? NameVisibility.NEVER :
+                            (p.teamData.getTeamVisibility(viewer) ? NameVisibility.ALWAYS : NameVisibility.NEVER),
                     p.teamData.getCollisionRule() ? CollisionRule.ALWAYS : CollisionRule.NEVER,
                     Collections.singletonList(p.getNickname()),
                     teamOptions,

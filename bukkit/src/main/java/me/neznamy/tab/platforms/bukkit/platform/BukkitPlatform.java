@@ -316,6 +316,12 @@ public class BukkitPlatform implements BackendPlatform {
     }
 
     @Override
+    public boolean supportsCustomNameTags() {
+        return !(this instanceof FoliaPlatform) &&
+                ReflectionUtils.classExists("org.bukkit.entity.TextDisplay");
+    }
+
+    @Override
     public boolean supportsListed() {
         return serverVersionInfo.getServerVersion().getNetworkId() >= ProtocolVersion.V1_19_3.getNetworkId();
     }

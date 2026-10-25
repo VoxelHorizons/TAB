@@ -14,11 +14,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BukkitTAB extends JavaPlugin {
 
+    private BukkitCustomNameTagRenderer customNameTagRenderer;
+
     @Override
     public void onEnable() {
         boolean folia = ReflectionUtils.classExists("io.papermc.paper.threadedregions.RegionizedServer");
         try {
             TAB.create(folia ? new FoliaPlatform(this) : new BukkitPlatform(this));
+            if (!folia) {
+                customNameTagRenderer = new BukkitCustomNameTagRenderer(this);
+                customNameTagRenderer.start();
+            }
         } catch (IllegalStateException e) {
             Bukkit.getConsoleSender().sendMessage("§c[TAB] ================================================================================");
             if (isSpecialJar()) {
@@ -49,6 +55,7 @@ public class BukkitTAB extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (customNameTagRenderer != null) customNameTagRenderer.stop();
         if (TAB.getInstance() == null) return;
         TAB.getInstance().unload();
     }

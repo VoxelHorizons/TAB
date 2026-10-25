@@ -33,6 +33,9 @@ public class NameTagPlayerData {
     /** Player's tagsuffix */
     public Property suffix;
 
+    /** Optional replacement display text for the middle (username) component. */
+    public Property tagname;
+
     /** Flag tracking whether this feature is disabled for the player with condition or not */
     public final AtomicBoolean disabled = new AtomicBoolean();
 

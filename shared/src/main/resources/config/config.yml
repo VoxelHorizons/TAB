@@ -34,6 +34,10 @@ scoreboard-teams:
   enabled: true
   enable-collision: true
   invisible-nametags: false
+  # Bukkit/Paper 1.19.4+ only. Changes visible overhead name using tagname.
+  # Shared display text cannot use relational/per-viewer placeholders.
+  custom-nametags:
+    enabled: false
   # https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Sorting-players-in-tablist
   sorting-types:
     - "GROUPS:owner,admin,mod,helper,builder,vip,default"
