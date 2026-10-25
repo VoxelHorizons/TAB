@@ -112,6 +112,10 @@ public final class BukkitCustomNameTagRenderer {
             entity.setGravity(false);
             entity.setInvulnerable(true);
             entity.setSilent(true);
+            // Never broadcast this entity to a joining player until TAB's
+            // vanish/visibility rules explicitly allow the label for them.
+            // Available on every Bukkit version supporting TextDisplay.
+            entity.getClass().getMethod("setVisibleByDefault", boolean.class).invoke(entity, false);
             Class<?> billboard = Class.forName("org.bukkit.entity.Display$Billboard");
             Object center = null;
             for (Object value : billboard.getEnumConstants()) {
