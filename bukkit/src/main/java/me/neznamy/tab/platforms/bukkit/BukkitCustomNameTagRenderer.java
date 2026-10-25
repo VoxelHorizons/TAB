@@ -85,7 +85,7 @@ public final class BukkitCustomNameTagRenderer {
                 tags.put(id, tag);
                 // No accidental vanilla-visible labels until permissions are checked.
                 for (Player viewer : Bukkit.getOnlinePlayers()) {
-                    viewer.hideEntity(plugin, display);
+                    setVisibility(viewer, display, false);
                 }
                 update(tag, owner, tabOwner);
             } else if (tag.entity.getLocation().distanceSquared(desired) > 0.0025) {
@@ -162,17 +162,30 @@ public final class BukkitCustomNameTagRenderer {
             // Track Player instances, not just UUIDs, to handle reconnects.
             Player shown = tag.visibleTo.get(id);
             if (visible && shown != viewer) {
-                viewer.showEntity(plugin, tag.entity);
+                setVisibility(viewer, tag.entity, true);
                 tag.visibleTo.put(id, viewer);
             } else if (!visible && shown != null) {
-                viewer.hideEntity(plugin, tag.entity);
+                setVisibility(viewer, tag.entity, false);
                 tag.visibleTo.remove(id);
             } else if (!visible) {
                 // New viewers should not see this tag until explicitly allowed.
-                viewer.hideEntity(plugin, tag.entity);
+                setVisibility(viewer, tag.entity, false);
             }
         }
         tag.visibleTo.keySet().retainAll(connected);
+    }
+
+    /**
+     * 1.16's compile-only Bukkit API lacks these methods, though they exist on
+     * every server with TextDisplay. Resolve on the live Player implementation.
+     */
+    private void setVisibility(Player viewer, Entity display, boolean show) {
+        try {
+            viewer.getClass().getMethod(show ? "showEntity" : "hideEntity",
+                    org.bukkit.plugin.Plugin.class, Entity.class).invoke(viewer, plugin, display);
+        } catch (ReflectiveOperationException | RuntimeException failure) {
+            warn("Unable to update TextDisplay visibility", failure);
+        }
     }
 
     private void warn(String message, Exception failure) {
