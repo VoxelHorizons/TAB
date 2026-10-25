@@ -118,7 +118,8 @@ public class VisibilityManager extends RefreshableFeature implements JoinListene
             if (viewer.teamData.hasTeamRegistered(player)) {
                 viewer.getScoreboard().updateTeam(
                         player.teamData.teamName,
-                        player.teamData.getTeamVisibility(viewer) ? Scoreboard.NameVisibility.ALWAYS : Scoreboard.NameVisibility.NEVER
+                        nameTags.isCustomNameTagsActive() ? Scoreboard.NameVisibility.NEVER :
+                            (player.teamData.getTeamVisibility(viewer) ? Scoreboard.NameVisibility.ALWAYS : Scoreboard.NameVisibility.NEVER)
                 );
             }
         }
@@ -137,7 +138,8 @@ public class VisibilityManager extends RefreshableFeature implements JoinListene
         if (viewer.teamData.hasTeamRegistered(player)) {
             viewer.getScoreboard().updateTeam(
                     player.teamData.teamName,
-                    player.teamData.getTeamVisibility(viewer) ? Scoreboard.NameVisibility.ALWAYS : Scoreboard.NameVisibility.NEVER
+                    nameTags.isCustomNameTagsActive() ? Scoreboard.NameVisibility.NEVER :
+                            (player.teamData.getTeamVisibility(viewer) ? Scoreboard.NameVisibility.ALWAYS : Scoreboard.NameVisibility.NEVER)
             );
         }
     }

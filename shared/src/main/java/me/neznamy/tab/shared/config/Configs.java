@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Core of loading configuration files
@@ -97,6 +98,7 @@ public class Configs {
                 mysql.openConnection();
                 groups = new MySQLGroupConfiguration(mysql);
                 users = new MySQLUserConfiguration(mysql);
+                activateConfiguredNameTags();
                 return;
             } catch (SQLException | ClassNotFoundException e) {
                 TAB.getInstance().getErrorManager().mysqlConnectionFailed(e);
@@ -104,6 +106,37 @@ public class Configs {
         }
         groups = groupsFile;
         users = usersFile;
+        activateConfiguredNameTags();
+    }
+
+    /**
+     * A configured tagname automatically activates the replacement nametag on
+     * supported Bukkit/Paper servers, even with scoreboard-teams.enabled=false.
+     * Sidebar scoreboards are never activated by this method.
+     */
+    private void activateConfiguredNameTags() {
+        if (!TAB.getInstance().getPlatform().supportsCustomNameTags()) return;
+        if (hasTagName(groups) || hasTagName(users)) {
+            config.enableCustomNameTagsFromProperties();
+        }
+    }
+
+    private boolean hasTagName(@Nullable PropertyConfiguration properties) {
+        if (properties == null) return false;
+        for (String entry : properties.getAllEntries()) {
+            if (containsTagName(properties.getGlobalSettings(entry))) return true;
+            for (Map<String, Object> settings : properties.getPerWorldSettings(entry).values()) {
+                if (containsTagName(settings)) return true;
+            }
+            for (Map<String, Object> settings : properties.getPerServerSettings(entry).values()) {
+                if (containsTagName(settings)) return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean containsTagName(@Nullable Map<String, Object> settings) {
+        return settings != null && settings.containsKey("tagname");
     }
 
     /**

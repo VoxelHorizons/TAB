@@ -34,6 +34,9 @@ scoreboard-teams:
   enabled: true
   enable-collision: true
   invisible-nametags: false
+  # Set tagname in groups.yml/users.yml for custom nicknames above player
+  # heads on modern Paper/Bukkit. This requires no scoreboard UI configuration.
+  # Internal scoreboard teams hide the vanilla player name automatically.
   # https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Sorting-players-in-tablist
   sorting-types:
     - "GROUPS:owner,admin,mod,helper,builder,vip,default"

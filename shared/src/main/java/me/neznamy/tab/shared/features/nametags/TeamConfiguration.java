@@ -19,6 +19,7 @@ public class TeamConfiguration {
     @NotNull private final String invisibleNameTags;
     private final boolean canSeeFriendlyInvisibles;
     @NotNull private final String disableCondition;
+    private final boolean customNameTags;
 
     /**
      * Returns instance of this class created from given configuration section. If there are
@@ -30,16 +31,23 @@ public class TeamConfiguration {
      */
     @NotNull
     public static TeamConfiguration fromSection(@NotNull ConfigurationSection section) {
+        return fromSection(section, false);
+    }
+
+    /** Auto enable when an explicit tagname property was found in groups or users. */
+    @NotNull
+    public static TeamConfiguration fromSection(@NotNull ConfigurationSection section, boolean detectedTagName) {
         // Check keys
         section.checkForUnknownKey(Arrays.asList("enabled", "enable-collision", "invisible-nametags", "sorting-types",
-                "case-sensitive-sorting", "can-see-friendly-invisibles", "disable-condition"));
+                "case-sensitive-sorting", "can-see-friendly-invisibles", "disable-condition", "custom-nametags"));
 
         return new TeamConfiguration(
                 section,
                 section.getObject("enable-collision", "true").toString(),
                 section.getObject("invisible-nametags", "false").toString(),
                 section.getBoolean("can-see-friendly-invisibles", false),
-                section.getString("disable-condition", "%world%=disabledworld")
+                section.getString("disable-condition", "%world%=disabledworld"),
+                detectedTagName || section.getBoolean("custom-nametags.enabled", false)
         );
     }
 }

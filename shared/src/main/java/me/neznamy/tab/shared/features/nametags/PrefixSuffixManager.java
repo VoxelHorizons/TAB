@@ -33,7 +33,8 @@ public class PrefixSuffixManager extends RefreshableFeature implements GroupList
         } else {
             boolean prefix = refreshed.teamData.prefix.update();
             boolean suffix = refreshed.teamData.suffix.update();
-            if (prefix || suffix) updatePrefixSuffix(refreshed);
+            boolean name = refreshed.teamData.tagname.update();
+            if (prefix || suffix || name) updatePrefixSuffix(refreshed);
         }
     }
 
@@ -69,6 +70,7 @@ public class PrefixSuffixManager extends RefreshableFeature implements GroupList
     private boolean updateProperties(@NotNull TabPlayer p) {
         boolean changed = p.updatePropertyFromConfig(p.teamData.prefix, "");
         if (p.updatePropertyFromConfig(p.teamData.suffix, "")) changed = true;
+        if (p.updatePropertyFromConfig(p.teamData.tagname, "%player%")) changed = true;
         return changed;
     }
 
@@ -101,6 +103,7 @@ public class PrefixSuffixManager extends RefreshableFeature implements GroupList
     public void loadProperties(@NotNull TabPlayer player) {
         player.teamData.prefix = player.loadPropertyFromConfig(this, "tagprefix", "");
         player.teamData.suffix = player.loadPropertyFromConfig(this, "tagsuffix", "");
+        player.teamData.tagname = player.loadPropertyFromConfig(this, "tagname", "%player%");
     }
 
     @Override

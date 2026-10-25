@@ -198,6 +198,11 @@ public interface Platform {
      */
     boolean supportsScoreboards();
 
+    /** Whether the platform provides a functioning replacement nametag renderer. */
+    default boolean supportsCustomNameTags() {
+        return false;
+    }
+
     /**
      * Returns {@code true} if server supports listed option (1.19.3+), {@code false} if not.
      *
